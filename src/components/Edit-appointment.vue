@@ -6,12 +6,12 @@
       max-width="600px"
     >
       <template v-slot:activator="{ on, attrs }" >
-        
+
             <v-btn tile color="success" v-bind="attrs" v-on="on" class="edit" >
               <v-icon left> mdi-pencil </v-icon>
               Edit
             </v-btn>
-          
+
       </template>
       <v-card>
         <v-card-title>
@@ -28,25 +28,37 @@
                 <v-text-field
                   label="date :"
                   type="date"
+                  :value="slot.date"
                   v-model="date"
                 ></v-text-field>
               </v-col>
-        
+                <v-btn
+            depressed
+            color="primary"
+            @click="dateDispo()"
+          >
+            search
+          </v-btn>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-select
-                  :items="['8-10', '10-11', '11-12', '15-16']"
+                 <v-select
                   label="Time"
+                  :items="timeDis"
                   v-model="time"
                   
                 ></v-select>
+                <!-- <select v-model="time">
+                  <option v-for="timeDispo in timeDis" :key="timeDispo" :value="timeDise">{{timeDispo}}</option>
+
+                </select> -->
+               
               </v-col>
               
             </v-row>
           </v-container>
-         
+
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -60,7 +72,7 @@
           <v-btn
             depressed
             color="primary"
-            @click="addSlots"
+            @click="editSlots(slot.id)"
           >
             Save
           </v-btn>
@@ -76,11 +88,23 @@
 
 import axios from "axios";
   export default {
+    props:{
+      slot : Object,
+      getAllData :Object,
+    },
     data: () => ({
       dialog: false,
+      items :['08-09','09-10','10-11','11-12','15-16','16-17','16-18'],
+      
+      timeDis:[],
+
+
     }),
+
+
     methods : {
-    addSlots(){
+
+    editSlots(id){
       var slots ={
         date :this.date,
         time :this.time
@@ -88,25 +112,53 @@ import axios from "axios";
       }
       axios({
         method: 'post',
-        url:'http://localhost:7882/vuejs-exemple/app/controllers/creneaux/AddCrenaux.php',
+        url:'http://localhost:7882/RDV-Cabinet-Médical/app/controllers/Update.php?id='+id,
         data: slots
       })
       .then(function(response){
-        
+
       })
+       this.$emit('clicked',slots);
+
+
       return this.dialog=false;
-      
-    }
+       
+
+    },
+  
     
-    }
+  dateDispo(){
+    var timeDispo ={
+        date : this.date,
+      };
+      var timeData;
+
+      
+      axios({
+        method: 'post',
+        url: 'http://localhost:7882/RDV-Cabinet-Médical/TimeDispo',
+        data : timeDispo,
+      })
+      .then(function(response){
+
+          timeData = response.data.map(time => time.Time);
+           
+
+      })
+      .then((response) => {
+        console.log(timeData);
+              this.timeDis = this.items.filter((e)=>!timeData.includes(e));
+
+        console.log(this.timeDis);
+      })
+    
+      .catch(function(error){
+       
+      })
+
+
+    },
+
+  }
   }
 </script>
-<style scoped>
-.edit{
-    /* display: flex;
-    flex-direction: column; */
-    
-    
-}
-
-</style>

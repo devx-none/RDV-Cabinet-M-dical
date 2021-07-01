@@ -1,22 +1,22 @@
-<?php
+<?php 
 header('Access-Control-Allow-Origin:*');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization, X-Requested-with');
 
-include_once '../../Models/users.php';
+// include_once '../../Models/crenaux.php';
+require_once 'C:\\xampp\\htdocs\RDV-Cabinet-Médical\app\Models\crenaux.php';
 
-$users = new users();
+$crenaux = new crenaux();
 $data = file_get_contents("php://input");
 $data = json_decode($data);
-$nom = $data->nom;
-$prenom = $data->prenom;
-$age = $data->age;
-$email = $data->email;
-$password = $data->password;
+$id = $_GET['id'];
+$date = $data->date;
+$time = $data->time;
+// $end_time = $data->end_time;
 
-if($users->addUser($nom,$prenom,$age,$email,$password)){
-    print_r(json_encode(["message"=>"ajout avec succes"]));
+if($crenaux->updateCrenaux($id,$date, $time)){
+    print_r(json_encode(["message"=>"modification avec succes"]));
 }else{
    
     print_r(json_encode(["error"=>"error"]));

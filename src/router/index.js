@@ -1,9 +1,11 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Slots from '../views/slots.vue'
 
 Vue.use(VueRouter)
+Vue.use(Vuex)
 
 const routes = [
   {

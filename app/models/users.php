@@ -1,5 +1,7 @@
 <?php 
-require_once '../../../Database/database.php';
+// require_once '../../../Database/database.php';
+require_once 'C:\\xampp\\htdocs\RDV-Cabinet-Médical\app\database\database.php';
+
 
 class users{
   
@@ -21,19 +23,13 @@ class users{
     
     static public function user($email,$password){
         
-        $stmt = database::connect()->prepare("SELECT * FROM users where email=:email and password=:password");
+        $stmt = database::connect()->prepare("SELECT reference FROM users where email=:email and password=:password");
         $stmt ->bindParam(':email',$email);
         $stmt ->bindParam(':password',$password);
         $stmt->execute();
-        $count = $stmt->rowCount();
-        if($count > 0){
-            return true;
-        }else{
-            return false;
-        }
-        
-    $stmt->close();
-    $stmt=null;
+        return $stmt->fetchAll();
+        $stmt->close();
+        $stmt=null;
     }
 
     

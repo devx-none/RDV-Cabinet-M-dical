@@ -149,6 +149,7 @@
 /*eslint-disable*/
 
 import axios from "axios";
+import {mapState} from "vuex";
 
 export default {
   data: () => ({
@@ -179,24 +180,31 @@ export default {
       }
       axios({
         method: 'post',
-        url: 'http://localhost:7882/vuejs-exemple/app/controllers/users/Login.php',
+        url: 'http://localhost:7882/RDV-Cabinet-Médical/login',
         data : user
       })
       .then(function(response){
-        
-       
-        //  this.error = true;
-         console.log(response.data);
+   
+          localStorage.setItem('reference',response.data[0].reference);
 
-         if(response.data.error='error'){
-           this.error = true;
-         }
+         var ref = localStorage.getItem('reference');
+         if(ref!=null){
+          //  this.$router.push('./slots');
+           window.location.href = './slots';
           
+ 
+         } 
+
+         
       })
       .catch(function(error){
        
       })
-      this.$router.push('./slots');
+     
+      
+       
+    
+      // this.$router.push('./slots');
     
     },
     register(){
@@ -210,7 +218,7 @@ export default {
     }
     axios({
       method: 'post',
-      url:'http://localhost:7882/vuejs-exemple/app/controllers/users/createUser.php',
+      url:'http://localhost:7882/RDV-Cabinet-Médical/app/controllers/users/createUser.php',
       data: users
     })
     .then(function(response) {
